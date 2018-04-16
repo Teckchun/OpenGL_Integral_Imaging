@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.btnDepthConverter = new System.Windows.Forms.Button();
             this.btnExpadingDepthValue = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -36,8 +38,6 @@
             this.btnGrayscaleImage = new System.Windows.Forms.Button();
             this.btnExpandDepthData = new System.Windows.Forms.Button();
             this.btnColorData = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -78,6 +78,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Option Menu";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 186);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(39, 13);
+            this.label8.TabIndex = 12;
+            this.label8.Text = "Output";
+            this.label8.Visible = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 33);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Input";
+            this.label7.Visible = false;
             // 
             // btnDepthConverter
             // 
@@ -149,26 +169,6 @@
             this.btnColorData.Text = "Color Data (1920x1080)";
             this.btnColorData.UseVisualStyleBackColor = true;
             this.btnColorData.Click += new System.EventHandler(this.btnColorData_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 33);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Input";
-            this.label7.Visible = false;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 186);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(39, 13);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "Output";
-            this.label8.Visible = false;
             // 
             // groupBox4
             // 
@@ -274,6 +274,7 @@
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
+            this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
             // 
             // pictureBox4
             // 

@@ -15,6 +15,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using OpenCvSharp.Extensions;
+using System.Drawing.Imaging;
 
 namespace OpenGLESINTEGRALIMAGING
 {
@@ -42,6 +43,8 @@ namespace OpenGLESINTEGRALIMAGING
         private FrameDescription depthFrameDescription;
         private CoordinateMapper mapper = null;
         private FrameDescription frameDescription = null;
+
+        Rectangle rect;
 
 
         public ExpandDepthImage()
@@ -134,15 +137,64 @@ namespace OpenGLESINTEGRALIMAGING
             //pictureBox4.Image = expandImg;
             depthExtend();
         }
+
+        //TODO: Test resize image
+        public Image ResizeImage(Image source, RectangleF destinationBounds)
+        {
+            Console.WriteLine(source.Width + "x" + source.Height);
+            
+            RectangleF sourceBounds = new RectangleF(0.0f, 0.0f, (float)source.Width, (float)source.Height);
+            RectangleF scaleBounds = new RectangleF();
+
+            Image destinationImage = new Bitmap((int)destinationBounds.Width, (int)destinationBounds.Height);
+            Graphics graph = Graphics.FromImage(destinationImage);
+            graph.InterpolationMode =
+                System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+            // Fill with background color
+            graph.FillRectangle(new SolidBrush(System.Drawing.Color.White), destinationBounds);
+
+            float resizeRatio, sourceRatio;
+            float scaleWidth, scaleHeight;
+
+            sourceRatio = (float)source.Width / (float)source.Height;
+
+            if (sourceRatio >= 1.0f)
+            {
+                //landscape
+                resizeRatio = destinationBounds.Width / sourceBounds.Width;
+                scaleWidth = destinationBounds.Width;
+                scaleHeight = sourceBounds.Height * resizeRatio;
+                float trimValue = destinationBounds.Height - scaleHeight;
+                graph.DrawImage(source, 0, (trimValue / 2), destinationBounds.Width, scaleHeight);
+            }
+            else
+            {
+                //portrait
+                resizeRatio = destinationBounds.Height / sourceBounds.Height;
+                scaleWidth = sourceBounds.Width * resizeRatio;
+                scaleHeight = destinationBounds.Height;
+                float trimValue = destinationBounds.Width - scaleWidth;
+                graph.DrawImage(source, (trimValue / 2), 0, scaleWidth, destinationBounds.Height);
+            }
+            Console.WriteLine(destinationImage.Width + "x" + destinationImage.Height);
+
+            pictureBox5.Image = destinationImage;
+            return destinationImage;
+
+        }
+
+       
+       
     
         void depthExtend()
         {
 
-                var brush = new SolidBrush(System.Drawing.Color.Black);
-          
-                //DepthImg = (Bitmap)Image.FromFile(ofd.FileName);
-                
+            var brush = new SolidBrush(System.Drawing.Color.Black);
 
+            //DepthImg = (Bitmap)Image.FromFile(ofd.FileName);
+            if (DepthImg != null)
+            {
                 int scale = Math.Min(ImageWidth / DepthImg.Width, ImageHeight / DepthImg.Height);
                 var bmp = new Bitmap(ImageWidth, ImageHeight);
                 var graph = Graphics.FromImage(bmp);
@@ -156,7 +208,14 @@ namespace OpenGLESINTEGRALIMAGING
                 //bmp.Save(@"D:\\Depth Image\\ResizeColor11.jpg");
 
                 pictureBox4.Image = bmp;
+               
                 label4.Visible = true;
+            }
+            else
+            {
+                MessageBox.Show("No image to convert!", "Source not found",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+            }
+                
 
             
 
@@ -230,7 +289,8 @@ namespace OpenGLESINTEGRALIMAGING
 
         private void btnExpadingDepthValue_Click(object sender, EventArgs e)
         {
-            
+            rect = new Rectangle(30, 90,1920, 1080);
+            ResizeImage(DepthImg, rect);
 
         }
 
@@ -271,6 +331,11 @@ namespace OpenGLESINTEGRALIMAGING
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
