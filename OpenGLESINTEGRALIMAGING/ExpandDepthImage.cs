@@ -289,10 +289,31 @@ namespace OpenGLESINTEGRALIMAGING
 
         private void btnExpadingDepthValue_Click(object sender, EventArgs e)
         {
-            rect = new Rectangle(30, 90,1920, 1080);
-            ResizeImage(DepthImg, rect);
+            //rect = new Rectangle(30, 90,1920, 1080);
+            //ResizeImage(DepthImg, rect);
+            System.Drawing.Size size = new System.Drawing.Size(1920,1080);
+            
+            Create24bpp(DepthImg,size);
+           
+
 
         }
+
+        public Bitmap Create24bpp(Image image, System.Drawing.Size size)
+        {
+
+            Console.WriteLine(image.Width + "x" + image.Height);
+            Bitmap bmp = new Bitmap(size.Width, size.Height,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            using (Graphics gr = Graphics.FromImage(bmp))
+                gr.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height));
+
+            Console.WriteLine(bmp.Width + "x" + bmp.Height);
+
+            pictureBox5.Image = bmp;
+            return bmp;
+        }
+
 
 
 
