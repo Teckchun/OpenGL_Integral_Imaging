@@ -45,6 +45,7 @@ namespace OpenGLESINTEGRALIMAGING
         private FrameDescription frameDescription = null;
 
         Rectangle rect;
+        public event PaintEventHandler Paint;
 
 
         public ExpandDepthImage()
@@ -287,32 +288,41 @@ namespace OpenGLESINTEGRALIMAGING
             
         }
 
+        private bool click = false;
         private void btnExpadingDepthValue_Click(object sender, EventArgs e)
         {
+            click = true;
+
+           
             //rect = new Rectangle(30, 90,1920, 1080);
             //ResizeImage(DepthImg, rect);
             System.Drawing.Size size = new System.Drawing.Size(1920,1080);
+
+            //Create24bpp(DepthImg,size);
+            // ImgInterpolation(DepthImg, null);
+            Console.WriteLine("Clicked ");
             
-            Create24bpp(DepthImg,size);
-           
+            pictureBox5.Refresh();
 
 
         }
 
-        public Bitmap Create24bpp(Image image, System.Drawing.Size size)
-        {
+        
 
-            Console.WriteLine(image.Width + "x" + image.Height);
-            Bitmap bmp = new Bitmap(size.Width, size.Height,
-                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            using (Graphics gr = Graphics.FromImage(bmp))
-                gr.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height));
+        //public Bitmap Create24bpp(Image image, System.Drawing.Size size)
+        //{
 
-            Console.WriteLine(bmp.Width + "x" + bmp.Height);
+        //    Console.WriteLine(image.Width + "x" + image.Height);
+        //    Bitmap bmp = new Bitmap(size.Width, size.Height,
+        //        System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+        //    using (Graphics gr = Graphics.FromImage(bmp))
+        //        gr.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
-            pictureBox5.Image = bmp;
-            return bmp;
-        }
+        //    Console.WriteLine(bmp.Width + "x" + bmp.Height);
+
+        //    pictureBox5.Image = bmp;
+        //    return bmp;
+        //}
 
 
 
@@ -357,6 +367,58 @@ namespace OpenGLESINTEGRALIMAGING
         private void pictureBox5_Click(object sender, EventArgs e)
         {
             
+        }
+
+        
+        private void pictureBox5_Paint(object sender, PaintEventArgs e)
+        {
+            Console.WriteLine("Paint calling...");
+            ImgInterpolation(DepthImg, e);
+        }
+
+        // TODO: Image interpolation method
+        public void ImgInterpolation(Image imgSource, PaintEventArgs e)
+        {
+
+
+
+            if (imgSource != null && click == true)
+            {
+                int width = 1920;
+                int height = 1080;
+                Bitmap bmp = new Bitmap(width, height);
+                Graphics g = Graphics.FromImage(bmp);
+                click = false;
+                Console.WriteLine("interpolation ");
+
+
+
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.DrawImage(
+                    imgSource,
+                    0,
+                    0,           // upper-left corner of source rectangle
+                    width,       // width of source rectangle
+                    height);
+                g.Dispose();
+
+
+                Console.WriteLine(bmp.Width + "x" + bmp.Height);
+                pictureBox5.Image = bmp;
+
+                bmp.Save("C:\\Users\\Teckchun\\Desktop\\Img\\" + System.DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".png");
+                //bmp.Dispose();
+
+
+                
+
+
+
+
+            }
+
+
+
         }
     }
 }
